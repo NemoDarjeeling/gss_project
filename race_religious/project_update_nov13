@@ -1,1 +1,11 @@
 This week our efforts focus on the discerning and fixing of race and religion bugs.
+We have successfully identified the problems with previous code that handles race and religion cross table analysis, including hispanic number error, range for hispanic identification error, black and hispanic confusion error, omission of code not converted from sas, and syntax errors.
+After fixing those problems, the code is as in stata_stu_reliFix.do, and result are as in res_nov13_reliFix.jpg, compared to the Brent's answer of res_target, difference lies in that white mp is 8 less and white cp is 8 more, and a bit more in all other trads.
+We proposed several hypothesis for such difference:
+1. We still left a few bit of sas code not implemented in stata, which should be more of the problem in religion than race, as if race changes, an even bigger difference should incur for the result table. 
+2. Difference in executing and operation logic between sas and stata, as for instance when we strictly conform to the logic of sas code to process hispanic / latino variable, our discrete method would yield a much smaller deviation from Brent's method.
+3. It is possible that Brent's stata code was based on an older or newer version of the original sas code, should Brent's code be also based on Professor Keister's sas code. As our current result compared to Brent's result, the main difference lies in white mp, white cp and other, and there are indeed several lines of code converting other into white mp or white cp.  
+Therefore, we proposed corresponding solutions for the hypothesis:
+1. We will check more carefully for the sas and our stata code to ensure there should be no omissions.
+2. We believe if this is an actual issue, it would be very appreciated that if we can have Brent's stata code on this analysis, allowing us to check regardless of the platform difference.
+3. It could also be helpful that we could have the result of original sas code on gss2021 data (and even other years) that we can compare and check whether there is problem with our code or it is due to some other reasons.
