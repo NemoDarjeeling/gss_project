@@ -1,30 +1,38 @@
 // make sure a new dataset such as "GSS2021.dta" is reloaded before executing this file
 
+// recode white, original race < 0 is dubious, but does not affect new_trad result
 gen white = .
 replace white = 1 if race == 1
-replace white = 0 if race < 0 | race > 1
+replace white = 0 if race > 1
 
+// recode black, original race < 0 is dubious, but does not affect new_trad result
 gen black = .
 replace black = 1 if race == 2
-replace black = 0 if race < 0 | race == 1 | race == 3
+replace black = 0 if race == 1 | race == 3
 
+// recode other_race, original race < 0 is dubious, but does not affect new_trad result
 gen oth_race = .
 replace oth_race = 1 if race == 3
-replace oth_race = 0 if race < 0 | race == 1 | race == 2
+replace oth_race = 0 if race == 1 | race == 2
 
+// recode latino
 gen latino = .
 replace latino = 1 if inlist(hispanic, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 20, 21, 22, 23, 24, 25, 30, 35, 41, 46, 47, 50)
+replace latino = 0 if hispanic == 1
 
+// recode latino, a more closer version to sas code, but cause even bigger deviation from Brent's answer
+gen latino_test = 0
+replace latino_test = 1 if hispanic > 1
+replace latino_test = . if hispanic < 0
 
-replace latino = 0 if hispanic == 1.
-
-
+// generate new variable race_fourcat
 gen race_fourcat = .
 replace race_fourcat = 1 if (white == 1 & latino == 0)
 replace race_fourcat = 2 if (black == 1 & latino == 0)
 replace race_fourcat = 3 if latino == 1
 replace race_fourcat = 4 if (white != 1 & black != 1 & latino != 1)
 
+// next few blocks are rather useless for race religion cross table analysis
 gen catholic = (relig == 2)
 replace catholic = . if relig <= 0
 replace catholic = 0 if relig == 1 | relig > 2
